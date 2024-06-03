@@ -326,8 +326,8 @@ const ShowData = ({ pageState, setPageState, factories }) => {
       sortable: true,
     },
     {
-      field: "CustomerId",
-      headerName: "CustomerId",
+      field: "CustomerName",
+      headerName: "Customer Name",
       sortable: true,
     },
     {
