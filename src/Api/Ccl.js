@@ -1,10 +1,5 @@
-import axiosInstance from "../config/api";
+import { fetchData } from "../config/fetchData";
 
 export const getCcls = async () => {
-  try {
-    const response = await axiosInstance.get(`/ccl`);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  return await fetchData(`/ccl`);
 };
