@@ -3,9 +3,7 @@ import React from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import {
   DashboardCustomizeTwoTone,
-  AdminPanelSettingsTwoTone,
-  CampaignTwoTone,
-  CorporateFareTwoTone,
+  PaymentsTwoTone,
 } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
@@ -39,43 +37,13 @@ const SideNav = () => {
         >
           <Typography variant="body">Dashboard</Typography>
         </MenuItem>
-        {auth().role === "agency" ? (
-          <MenuItem
-            active={location.pathname === "/users"}
-            component={<Link to={"/users"} />}
-            icon={<AdminPanelSettingsTwoTone />}
-          >
-            <Typography variant="body">Users</Typography>
-          </MenuItem>
-        ) : null}
-        {auth().role === "agency" ? (
-          <MenuItem
-            active={location.pathname === "/brands"}
-            component={<Link to={"/brands"} />}
-            icon={<CorporateFareTwoTone />}
-          >
-            <Typography variant="body">Brands</Typography>
-          </MenuItem>
-        ) : null}
-        {auth().role === "agency" ? (
-          <MenuItem
-            active={location.pathname === "/campaigns"}
-            component={<Link to={"/campaigns"} />}
-            icon={<CampaignTwoTone />}
-          >
-            <Typography variant="body">Campaigns</Typography>
-          </MenuItem>
-        ) : null}
-
-        {/* {auth().role === "agency" ? (
-          <MenuItem
-            active={location.pathname === "/reports"}
-            component={<Link to={"/reports"} />}
-            icon={<AssessmentTwoTone />}
-          >
-            <Typography variant="body">Reports</Typography>
-          </MenuItem>
-        ) : null} */}
+        <MenuItem
+          active={location.pathname === "/rfqs"}
+          component={<Link to={"/rfqs"} />}
+          icon={<PaymentsTwoTone />}
+        >
+          <Typography variant="body">Rfq</Typography>
+        </MenuItem>
       </Menu>
     </Sidebar>
   );
