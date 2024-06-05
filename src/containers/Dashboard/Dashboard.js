@@ -9,6 +9,7 @@ import { getLayers } from "../../Api/Layers";
 import { getStatuses } from "../../Api/Status";
 import { Box } from "@mui/material";
 import ShowData from "../../components/Dashboard/ShowData";
+import InsertOrder from "./Insert/InsertOrder";
 
 const Dashboard = () => {
   const [error, setError] = useState(null);
@@ -152,6 +153,7 @@ const Dashboard = () => {
         m: 2,
       }}
     >
+      <InsertOrder />
       <Filters
         filters={pageState.filters}
         setFilters={setFilters}

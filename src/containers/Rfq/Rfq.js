@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { getRfqList } from "../../Api/Rfq";
 import ShowData from "../../components/Rfq/ShowData";
 import Filters from "./Filters/Filters";
+import InsertRfq from "./Insert/InsertRfq";
+
 const Rfq = () => {
   const [error, setError] = useState(null);
   const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
@@ -60,6 +62,7 @@ const Rfq = () => {
   }
   return (
     <Box sx={{ m: 2 }}>
+      <InsertRfq />
       <Filters filters={pageState.filters} setFilters={setFilters} />
       <ShowData pageState={pageState} setPageState={setPageState} />
     </Box>
