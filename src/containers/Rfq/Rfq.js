@@ -5,6 +5,7 @@ import ShowData from "../../components/Rfq/ShowData";
 import Filters from "./Filters/Filters";
 import InsertRfq from "./Insert/InsertRfq";
 import containerStyles from "../../styles/container";
+import ShowError from "../../components/global/ShowError";
 
 const Rfq = () => {
   const [error, setError] = useState(null);
@@ -49,17 +50,16 @@ const Rfq = () => {
           data: items,
           total: totalCount,
         }));
-        console.log(pageState.total);
       } catch (error) {
         setPageState(oldState => ({ ...oldState, isLoading: false }));
         setError(error);
       }
     };
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.filters, pageState.total]);
+  }, [pageState.page, pageState.pageSize, pageState.filters]);
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <ShowError error={error} />;
   }
   return (
     <Box sx={containerStyles.container}>

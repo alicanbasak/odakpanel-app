@@ -13,6 +13,7 @@ import InsertOrder from "./Insert/InsertOrder";
 import containerStyles from "../../styles/container";
 import Uploader from "../../components/global/Uploader";
 import { NotificationProvider } from "../../context/NotificationContext";
+import ShowError from "../../components/global/ShowError";
 
 const Dashboard = () => {
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
@@ -124,54 +125,33 @@ const Dashboard = () => {
     fetchData();
   }, [pageState.page, pageState.pageSize, pageState.filters]);
 
-  // useEffect(() => {
-  //   const excludeFactoryOdak = async () => {
-  //     setPageState(oldState => ({ ...oldState, isLoading: true }));
-  //     try {
-  //       const { items, totalCount } = await getOrderList({
-  //         page: pageState.page + 1,
-  //         pageSize: pageState.pageSize,
-  //         filters: { ...pageState.filters, excludeFactoryId: "66" },
-  //       });
-  //       setPageState(oldState => ({
-  //         ...oldState,
-  //         isLoading: false,
-  //         data: items,
-  //         total: totalCount,
-  //       }));
-  //     } catch (error) {
-  //       setPageState(oldState => ({ ...oldState, isLoading: false }));
-  //       setError(error);
-  //     }
-  //   };
-  //   excludeFactoryOdak();
-  // }, [pageState.page, pageState.pageSize, pageState.filters.excludeFactoryId]);
-
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <ShowError error={error} />;
   }
 
   return (
-    <Box sx={containerStyles.container}>
-      <InsertOrder action={() => setOpenInsertDialog(true)} />
-      <NotificationProvider>
+    <NotificationProvider>
+      <Box sx={containerStyles.container}>
+        <InsertOrder action={() => setOpenInsertDialog(true)} />
+
         <Uploader
           open={openInsertDialog}
           onClose={() => setOpenInsertDialog(false)}
           title="Insert Order"
         />
-      </NotificationProvider>
-      <Filters
-        filters={pageState.filters}
-        setFilters={setFilters}
-        filterOptions={filterOptions}
-      />
-      <ShowData
-        factories={factories}
-        pageState={pageState}
-        setPageState={setPageState}
-      />
-    </Box>
+
+        <Filters
+          filters={pageState.filters}
+          setFilters={setFilters}
+          filterOptions={filterOptions}
+        />
+        <ShowData
+          factories={factories}
+          pageState={pageState}
+          setPageState={setPageState}
+        />
+      </Box>{" "}
+    </NotificationProvider>
   );
 };
 
