@@ -4,6 +4,7 @@ import { getRfqList } from "../../Api/Rfq";
 import ShowData from "../../components/Rfq/ShowData";
 import Filters from "./Filters/Filters";
 import InsertRfq from "./Insert/InsertRfq";
+import containerStyles from "../../styles/container";
 
 const Rfq = () => {
   const [error, setError] = useState(null);
@@ -55,13 +56,13 @@ const Rfq = () => {
       }
     };
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.filters]);
+  }, [pageState.page, pageState.pageSize, pageState.filters, pageState.total]);
 
   if (error) {
     return <div>Error: {error.message}</div>;
   }
   return (
-    <Box sx={{ m: 2 }}>
+    <Box sx={containerStyles.container}>
       <InsertRfq />
       <Filters filters={pageState.filters} setFilters={setFilters} />
       <ShowData pageState={pageState} setPageState={setPageState} />

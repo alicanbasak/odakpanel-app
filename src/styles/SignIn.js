@@ -1,4 +1,4 @@
-const styles = {
+const signInStyles = {
   container: {
     backgroundImage: "url(/background.png)",
     backgroundSize: "cover",
@@ -23,4 +23,4 @@ const styles = {
   submitButton: { mt: 2, mb: 3, color: "#fff" },
 };
 
-export default styles;
+export default signInStyles;

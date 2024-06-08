@@ -3,7 +3,7 @@ import { Box, Button, Container, CssBaseline, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useHandleSubmit } from "../../handlers/SignIn";
-import styles from "../../styles/SignIn";
+import signInStyles from "../../styles/signIn";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -18,9 +18,9 @@ export default function SignIn() {
   });
 
   return (
-    <Container component="main" maxWidth="xxl" sx={styles.container}>
+    <Container component="main" maxWidth="xxl" sx={signInStyles.container}>
       <CssBaseline />
-      <Box sx={styles.formLayout}>
+      <Box sx={signInStyles.formLayout}>
         <Box>
           <img src="logo.png" alt="logo" />
         </Box>
@@ -53,7 +53,7 @@ export default function SignIn() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={styles.submitButton}
+            sx={signInStyles.submitButton}
           >
             Sign In
           </Button>

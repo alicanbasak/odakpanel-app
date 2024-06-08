@@ -10,8 +10,11 @@ import { getStatuses } from "../../Api/Status";
 import { Box } from "@mui/material";
 import ShowData from "../../components/Dashboard/ShowData";
 import InsertOrder from "./Insert/InsertOrder";
+import containerStyles from "../../styles/container";
+import Uploader from "../../components/global/Uploader";
 
 const Dashboard = () => {
+  const [openInsertDialog, setOpenInsertDialog] = useState(false);
   const [error, setError] = useState(null);
   const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
   const [factories, setFactories] = useState([]);
@@ -120,40 +123,41 @@ const Dashboard = () => {
     fetchData();
   }, [pageState.page, pageState.pageSize, pageState.filters]);
 
-  useEffect(() => {
-    const excludeFactoryOdak = async () => {
-      setPageState(oldState => ({ ...oldState, isLoading: true }));
-      try {
-        const { items, totalCount } = await getOrderList({
-          page: pageState.page + 1,
-          pageSize: pageState.pageSize,
-          filters: { ...pageState.filters, excludeFactoryId: "66" },
-        });
-        setPageState(oldState => ({
-          ...oldState,
-          isLoading: false,
-          data: items,
-          total: totalCount,
-        }));
-      } catch (error) {
-        setPageState(oldState => ({ ...oldState, isLoading: false }));
-        setError(error);
-      }
-    };
-    excludeFactoryOdak();
-  }, [pageState.filters, pageState.page, pageState.pageSize]);
+  // useEffect(() => {
+  //   const excludeFactoryOdak = async () => {
+  //     setPageState(oldState => ({ ...oldState, isLoading: true }));
+  //     try {
+  //       const { items, totalCount } = await getOrderList({
+  //         page: pageState.page + 1,
+  //         pageSize: pageState.pageSize,
+  //         filters: { ...pageState.filters, excludeFactoryId: "66" },
+  //       });
+  //       setPageState(oldState => ({
+  //         ...oldState,
+  //         isLoading: false,
+  //         data: items,
+  //         total: totalCount,
+  //       }));
+  //     } catch (error) {
+  //       setPageState(oldState => ({ ...oldState, isLoading: false }));
+  //       setError(error);
+  //     }
+  //   };
+  //   excludeFactoryOdak();
+  // }, [pageState.page, pageState.pageSize, pageState.filters.excludeFactoryId]);
 
   if (error) {
     return <div>Error: {error.message}</div>;
   }
 
   return (
-    <Box
-      sx={{
-        m: 2,
-      }}
-    >
-      <InsertOrder />
+    <Box sx={containerStyles.container}>
+      <InsertOrder action={() => setOpenInsertDialog(true)} />
+      <Uploader
+        open={openInsertDialog}
+        onClose={() => setOpenInsertDialog(false)}
+        title="Insert Order"
+      />
       <Filters
         filters={pageState.filters}
         setFilters={setFilters}

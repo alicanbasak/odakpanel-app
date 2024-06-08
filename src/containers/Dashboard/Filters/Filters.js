@@ -8,11 +8,13 @@ import {
   Divider,
   Grid,
 } from "@mui/material";
+import filterStyles from "../../../styles/filters";
+import inputStyles from "../../../styles/inputs";
 
 const Filters = ({ filters, setFilters, filterOptions }) => {
   const [selectedFilters, setSelectedFilters] = useState(filters);
   const [search, setSearch] = useState(filters.search);
-  const [excludeFactory, setExcludeFactory] = useState(true);
+  const [excludeFactory, setExcludeFactory] = useState(false);
   const [orderToBeSent, setOrderToBeSent] = useState(false);
   const [delay, setDelay] = useState(false);
   const [dataWillBeSend, setDataWillBeSend] = useState(false);
@@ -125,34 +127,18 @@ const Filters = ({ filters, setFilters, filterOptions }) => {
   };
 
   return (
-    <Box
-      sx={{
-        my: 2,
-        backgroundColor: "white",
-        boxShadow: "0 0 5px rgba(0,0,0,0.2)",
-        py: 3,
-        px: 3,
-        borderRadius: 1,
-      }}
-    >
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+    <Box sx={filterStyles.filterBox}>
+      <Grid
+        container
+        rowSpacing={filterStyles.rowSpace}
+        columnSpacing={filterStyles.columnSpace}
+      >
         {Object.keys(filterOptions).map((filterName, index) => (
           <Grid item xs={12} sm={12} md={4} key={index}>
             <Autocomplete
               size="small"
               key={filterName}
-              sx={{
-                '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]':
-                  {
-                    paddingRight: "65px!important",
-                  },
-                "& .MuiAutocomplete-tagSizeSmall": {
-                  maxWidth: "calc(100% - 45px)",
-                },
-                ".MuiAutocomplete-inputRoot .MuiAutocomplete-input": {
-                  minWidth: "0",
-                },
-              }}
+              sx={inputStyles.autoComplete}
               options={filterOptions[filterName]}
               getOptionLabel={option => option.label}
               isOptionEqualToValue={(option, value) => option.value === value}
@@ -164,7 +150,7 @@ const Filters = ({ filters, setFilters, filterOptions }) => {
               multiple
               renderInput={params => (
                 <TextField
-                  sx={{ width: "100%" }}
+                  sx={inputStyles.textField}
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                   {...params}
@@ -196,7 +182,11 @@ const Filters = ({ filters, setFilters, filterOptions }) => {
           mb: 2,
         }}
       />
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid
+        container
+        rowSpacing={filterStyles.rowSpace}
+        columnSpacing={filterStyles.columnSpace}
+      >
         <Grid item xs={12} sm={12} md={4}>
           <TextField
             id="filled-search"
@@ -205,7 +195,7 @@ const Filters = ({ filters, setFilters, filterOptions }) => {
             type="search"
             variant="outlined"
             value={search}
-            sx={{ width: "100%" }}
+            sx={inputStyles.textField}
             onChange={handleSearchChange}
           />
         </Grid>
