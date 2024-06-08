@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import { getRfqList } from "../../Api/Rfq";
 import ShowData from "../../components/Rfq/ShowData";
 import Filters from "./Filters/Filters";
-import InsertRfq from "./Insert/InsertRfq";
 import containerStyles from "../../styles/container";
+import Uploader from "../../components/global/Uploader";
+import { NotificationProvider } from "../../context/NotificationContext";
 import ShowError from "../../components/global/ShowError";
+import InsertButton from "../../components/global/Button";
 
 const Rfq = () => {
+  const [openInsertDialog, setOpenInsertDialog] = useState(false);
   const [error, setError] = useState(null);
   const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
   const [pageState, setPageState] = useState({
@@ -63,7 +66,17 @@ const Rfq = () => {
   }
   return (
     <Box sx={containerStyles.container}>
-      <InsertRfq />
+      <InsertButton
+        title="Insert RFQ"
+        action={() => setOpenInsertDialog(true)}
+      />
+      <NotificationProvider>
+        <Uploader
+          open={openInsertDialog}
+          onClose={() => setOpenInsertDialog(false)}
+          title="Insert RFQ"
+        />
+      </NotificationProvider>
       <Filters filters={pageState.filters} setFilters={setFilters} />
       <ShowData pageState={pageState} setPageState={setPageState} />
     </Box>

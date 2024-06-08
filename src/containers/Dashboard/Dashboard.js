@@ -9,11 +9,11 @@ import { getLayers } from "../../Api/Layers";
 import { getStatuses } from "../../Api/Status";
 import { Box } from "@mui/material";
 import ShowData from "../../components/Dashboard/ShowData";
-import InsertOrder from "./Insert/InsertOrder";
 import containerStyles from "../../styles/container";
 import Uploader from "../../components/global/Uploader";
 import { NotificationProvider } from "../../context/NotificationContext";
 import ShowError from "../../components/global/ShowError";
+import InsertButton from "../../components/global/Button";
 
 const Dashboard = () => {
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
@@ -130,28 +130,30 @@ const Dashboard = () => {
   }
 
   return (
-    <NotificationProvider>
-      <Box sx={containerStyles.container}>
-        <InsertOrder action={() => setOpenInsertDialog(true)} />
-
+    <Box sx={containerStyles.container}>
+      <InsertButton
+        title="Insert Order"
+        action={() => setOpenInsertDialog(true)}
+      />
+      <NotificationProvider>
         <Uploader
           open={openInsertDialog}
           onClose={() => setOpenInsertDialog(false)}
           title="Insert Order"
         />
+      </NotificationProvider>
 
-        <Filters
-          filters={pageState.filters}
-          setFilters={setFilters}
-          filterOptions={filterOptions}
-        />
-        <ShowData
-          factories={factories}
-          pageState={pageState}
-          setPageState={setPageState}
-        />
-      </Box>{" "}
-    </NotificationProvider>
+      <Filters
+        filters={pageState.filters}
+        setFilters={setFilters}
+        filterOptions={filterOptions}
+      />
+      <ShowData
+        factories={factories}
+        pageState={pageState}
+        setPageState={setPageState}
+      />
+    </Box>
   );
 };
 
