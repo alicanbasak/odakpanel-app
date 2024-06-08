@@ -12,6 +12,7 @@ import ShowData from "../../components/Dashboard/ShowData";
 import InsertOrder from "./Insert/InsertOrder";
 import containerStyles from "../../styles/container";
 import Uploader from "../../components/global/Uploader";
+import { NotificationProvider } from "../../context/NotificationContext";
 
 const Dashboard = () => {
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
@@ -153,11 +154,13 @@ const Dashboard = () => {
   return (
     <Box sx={containerStyles.container}>
       <InsertOrder action={() => setOpenInsertDialog(true)} />
-      <Uploader
-        open={openInsertDialog}
-        onClose={() => setOpenInsertDialog(false)}
-        title="Insert Order"
-      />
+      <NotificationProvider>
+        <Uploader
+          open={openInsertDialog}
+          onClose={() => setOpenInsertDialog(false)}
+          title="Insert Order"
+        />
+      </NotificationProvider>
       <Filters
         filters={pageState.filters}
         setFilters={setFilters}

@@ -14,8 +14,10 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon, Cancel as CancelIcon } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
+import { useNotification } from "../../context/NotificationContext.js";
 
 const UploaderDialog = ({ open, onClose, title }) => {
+  const { showNotification } = useNotification();
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -44,6 +46,7 @@ const UploaderDialog = ({ open, onClose, title }) => {
         clearInterval(interval);
         setUploading(false);
         setUploaded(true);
+        showNotification("Upload completed successfully", "success");
       }
     }, 500);
   };
@@ -138,6 +141,9 @@ const UploaderDialog = ({ open, onClose, title }) => {
           onClick={handleSubmit}
           variant="contained"
           color="primary"
+          sx={{
+            color: "white!important",
+          }}
           disabled={!uploaded}
         >
           Insert
