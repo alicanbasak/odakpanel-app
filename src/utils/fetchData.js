@@ -1,4 +1,4 @@
-import axiosInstance from "./api";
+import axiosInstance from "../config/api";
 
 const fetchData = async (endpoint, params = {}) => {
   try {

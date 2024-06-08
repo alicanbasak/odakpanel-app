@@ -1,7 +1,7 @@
 import React from "react";
 import DataTable from "../data/DataTable";
-import { getRole } from "../../config/getUserCredentials";
-import { calculateProfit } from "../../config/calculateProfit";
+import { getRole } from "../../utils/getUserCredentials";
+import { calculateProfit } from "../../utils/calculateProfit";
 import { Chip } from "@mui/material";
 
 const ShowData = ({ pageState, setPageState, factories }) => {
