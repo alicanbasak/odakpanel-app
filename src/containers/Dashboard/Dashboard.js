@@ -14,6 +14,7 @@ import Uploader from "../../components/global/Uploader";
 import { NotificationProvider } from "../../context/NotificationContext";
 import ShowError from "../../components/global/ShowError";
 import InsertButton from "../../components/global/Button";
+import { setFilters } from "../../utils/setFilters";
 
 const Dashboard = () => {
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
@@ -44,13 +45,6 @@ const Dashboard = () => {
       dataWillBeSend: false,
     },
   });
-
-  const setFilters = filters => {
-    setPageState(oldState => ({
-      ...oldState,
-      filters: { ...oldState.filters, ...filters },
-    }));
-  };
 
   const filterOptions = {
     status: statuses.map(status => ({
@@ -145,7 +139,7 @@ const Dashboard = () => {
 
       <Filters
         filters={pageState.filters}
-        setFilters={setFilters}
+        setFilters={filters => setFilters(filters, setPageState)}
         filterOptions={filterOptions}
       />
       <ShowData

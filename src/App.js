@@ -6,6 +6,7 @@ import React from "react";
 import SideNav from "./components//global/SideNav";
 import theme from "./config/theme";
 import { useAuthUser } from "react-auth-kit";
+import { NotificationProvider } from "./context/NotificationContext";
 
 function App() {
   const auth = useAuthUser();
@@ -13,16 +14,18 @@ function App() {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-        <ProSidebarProvider>
-          <CssBaseline />
-          {auth() ? <AppHeader /> : null}
-          <Box sx={styles.container}>
-            {auth() ? <SideNav /> : null}
-            <Box component={"main"} sx={styles.mainSection}>
-              <AppRoutes />
+        <NotificationProvider>
+          <ProSidebarProvider>
+            <CssBaseline />
+            {auth() ? <AppHeader /> : null}
+            <Box sx={styles.container}>
+              {auth() ? <SideNav /> : null}
+              <Box component={"main"} sx={styles.mainSection}>
+                <AppRoutes />
+              </Box>
             </Box>
-          </Box>
-        </ProSidebarProvider>
+          </ProSidebarProvider>
+        </NotificationProvider>
       </ThemeProvider>
     </React.Fragment>
   );

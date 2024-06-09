@@ -2,7 +2,7 @@ import React from "react";
 import DataTable from "../data/DataTable";
 // import { getRole } from "../../utils/getUserCredentials";
 
-const ShowData = ({ pageState, setPageState }) => {
+const ShowData = ({ pageState, setPageState, selection }) => {
   // const role = getRole();
 
   const columns = [
@@ -58,6 +58,7 @@ const ShowData = ({ pageState, setPageState }) => {
       role={1}
       pageState={pageState}
       setPageState={setPageState}
+      onSelectionModelChange={selection}
     />
   );
 };

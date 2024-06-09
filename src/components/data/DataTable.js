@@ -23,14 +23,15 @@ const DataTable = ({
   pageState,
   setPageState,
   hideToolbar = false,
+  onSelectionModelChange,
 }) => {
   return (
     <DataGrid
-    sx={{
-      backgroundColor: "white",
-      boxShadow: "0 0 5px rgba(0,0,0,0.1)",
-      p:1,
-    }}
+      sx={{
+        backgroundColor: "white",
+        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
+        p: 1,
+      }}
       getRowId={row => row.Id}
       autoHeight
       rows={rows}
@@ -49,6 +50,7 @@ const DataTable = ({
       onPageSizeChange={newPageSize =>
         setPageState(old => ({ ...old, pageSize: newPageSize }))
       }
+      checkboxSelection
       columns={columns}
       components={{
         Toolbar: () => {
@@ -56,6 +58,7 @@ const DataTable = ({
           return CustomToolbar();
         },
       }}
+      onSelectionModelChange={onSelectionModelChange}
     />
   );
 };

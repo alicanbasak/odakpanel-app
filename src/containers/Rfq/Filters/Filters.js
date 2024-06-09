@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, TextField, Grid } from "@mui/material";
 
 const Filters = ({ filters, setFilters }) => {
-  const [selectedFilters, setSelectedFilters] = useState(filters);
+  const [selectedFilters] = useState(filters);
   const [search, setSearch] = useState(filters.search);
 
   useEffect(() => {
@@ -10,14 +10,6 @@ const Filters = ({ filters, setFilters }) => {
     setFilters({ ...updatedFilters, search });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
-
-  const handleFilterChange = (filterName, newValues) => {
-    const valueString = newValues.map(option => option.value).join(",");
-    setSelectedFilters(prevSelectedFilters => ({
-      ...prevSelectedFilters,
-      [filterName]: valueString,
-    }));
-  };
 
   const handleSearchChange = e => {
     setSearch(e.target.value);

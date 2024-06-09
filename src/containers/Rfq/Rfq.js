@@ -5,11 +5,15 @@ import ShowData from "../../components/Rfq/ShowData";
 import Filters from "./Filters/Filters";
 import containerStyles from "../../styles/container";
 import Uploader from "../../components/global/Uploader";
-import { NotificationProvider } from "../../context/NotificationContext";
 import ShowError from "../../components/global/ShowError";
 import InsertButton from "../../components/global/Button";
+import DeleteButton from "../../components/global/Button";
+import { useNotification } from "../../context/NotificationContext";
+import { deleteHandler } from "../../handlers/deleteHandler";
+import { setFilters } from "../../utils/setFilters";
 
 const Rfq = () => {
+  const { showNotification } = useNotification();
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
   const [error, setError] = useState(null);
   const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
@@ -22,20 +26,15 @@ const Rfq = () => {
     filters: {
       search: "",
     },
+    selectedRows: [],
   });
 
-  const setFilters = filters => {
-    setPageState(oldState => ({
-      ...oldState,
-      filters: { ...oldState.filters, ...filters },
-    }));
+  const handleSelectionChange = selection => {
+    setPageState(oldState => ({ ...oldState, selectedRows: selection }));
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoadingFilterDependency(false);
-    };
-    fetchData();
+    setLoadingFilterDependency(false);
   }, [loadingFilterDependency]);
 
   useEffect(() => {
@@ -58,27 +57,64 @@ const Rfq = () => {
         setError(error);
       }
     };
+
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.filters]);
+  }, [
+    pageState.page,
+    pageState.pageSize,
+    pageState.filters,
+    loadingFilterDependency,
+  ]);
 
   if (error) {
     return <ShowError error={error} />;
   }
+
   return (
     <Box sx={containerStyles.container}>
-      <InsertButton
-        title="Insert RFQ"
-        action={() => setOpenInsertDialog(true)}
-      />
-      <NotificationProvider>
-        <Uploader
-          open={openInsertDialog}
-          onClose={() => setOpenInsertDialog(false)}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          gap: 2,
+          alignItems: "center",
+          marginBottom: 2,
+        }}
+      >
+        <InsertButton
           title="Insert RFQ"
+          action={() => setOpenInsertDialog(true)}
         />
-      </NotificationProvider>
-      <Filters filters={pageState.filters} setFilters={setFilters} />
-      <ShowData pageState={pageState} setPageState={setPageState} />
+        {pageState.selectedRows.length > 0 && (
+          <DeleteButton
+            title="Delete RFQ"
+            action={() =>
+              deleteHandler(
+                "/rfqs/delete",
+                pageState.selectedRows,
+                showNotification,
+                setError,
+                setPageState,
+                setLoadingFilterDependency
+              )
+            }
+          />
+        )}
+      </Box>
+      <Uploader
+        open={openInsertDialog}
+        onClose={() => setOpenInsertDialog(false)}
+        title="Insert RFQ"
+      />
+      <Filters
+        filters={pageState.filters}
+        setFilters={filters => setFilters(filters, setPageState)}
+      />
+      <ShowData
+        pageState={pageState}
+        setPageState={setPageState}
+        selection={handleSelectionChange}
+      />
     </Box>
   );
 };
