@@ -12,10 +12,12 @@ import { useNotification } from "../../context/NotificationContext";
 import { deleteHandler } from "../../handlers/deleteHandler";
 import { setFilters } from "../../utils/setFilters";
 import buttonGroupStyles from "../../styles/buttonGroup";
+import Confirm from "../../components/global/Confirm";
 
 const Rfq = () => {
   const { showNotification } = useNotification();
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [error, setError] = useState(null);
   const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
   const [pageState, setPageState] = useState({
@@ -81,15 +83,10 @@ const Rfq = () => {
         {pageState.selectedRows.length > 0 && (
           <DeleteButton
             title="Delete RFQ"
-            action={() =>
-              deleteHandler(
-                "/rfqs/delete",
-                pageState.selectedRows,
-                showNotification,
-                setError,
-                setPageState,
-                setLoadingFilterDependency
-              )
+            action={
+              pageState.selectedRows.length > 0
+                ? () => setOpenDeleteDialog(true)
+                : null
             }
           />
         )}
@@ -107,6 +104,23 @@ const Rfq = () => {
         pageState={pageState}
         setPageState={setPageState}
         selection={handleSelectionChange}
+      />
+      <Confirm
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        title="Delete RFQ"
+        content="Are you sure you want to delete this RFQ?"
+        buttonText="Delete"
+        action={() =>
+          deleteHandler(
+            "/rfqs/delete",
+            pageState.selectedRows,
+            showNotification,
+            setError,
+            setPageState,
+            setLoadingFilterDependency
+          ).then(() => setOpenDeleteDialog(false))
+        }
       />
     </Box>
   );

@@ -8,12 +8,6 @@ const deleteHandler = async (
   setPageState,
   reload
 ) => {
-  const confirmation = window.confirm(
-    "Are you sure you want to delete the selected rows?"
-  );
-
-  if (!confirmation) return;
-
   try {
     const result = await postData(endpoint, {
       ids: rows,
