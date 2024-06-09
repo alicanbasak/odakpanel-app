@@ -4,7 +4,7 @@ import { getRole } from "../../utils/getUserCredentials";
 import { calculateProfit } from "../../utils/calculateProfit";
 import { Chip } from "@mui/material";
 
-const ShowData = ({ pageState, setPageState, factories }) => {
+const ShowData = ({ pageState, setPageState, factories, selection }) => {
   const role = getRole();
 
   const showBgColor = value => {
@@ -456,6 +456,7 @@ const ShowData = ({ pageState, setPageState, factories }) => {
       role={1}
       pageState={pageState}
       setPageState={setPageState}
+      onSelectionModelChange={selection}
     />
   );
 };

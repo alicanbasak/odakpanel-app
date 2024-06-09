@@ -15,6 +15,7 @@ import { NotificationProvider } from "../../context/NotificationContext";
 import ShowError from "../../components/global/ShowError";
 import InsertButton from "../../components/global/Button";
 import { setFilters } from "../../utils/setFilters";
+import { handleSelectionChange } from "../../handlers/selectionHandler";
 
 const Dashboard = () => {
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
@@ -44,6 +45,7 @@ const Dashboard = () => {
       delay: false,
       dataWillBeSend: false,
     },
+    selectedRows: [],
   });
 
   const filterOptions = {
@@ -117,7 +119,12 @@ const Dashboard = () => {
       }
     };
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.filters]);
+  }, [
+    pageState.page,
+    pageState.pageSize,
+    pageState.filters,
+    loadingFilterDependency,
+  ]);
 
   if (error) {
     return <ShowError error={error} />;
@@ -146,6 +153,7 @@ const Dashboard = () => {
         factories={factories}
         pageState={pageState}
         setPageState={setPageState}
+        selection={selection => handleSelectionChange(selection, setPageState)}
       />
     </Box>
   );

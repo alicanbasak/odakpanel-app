@@ -13,6 +13,7 @@ import { deleteHandler } from "../../handlers/deleteHandler";
 import { setFilters } from "../../utils/setFilters";
 import buttonGroupStyles from "../../styles/buttonGroup";
 import Confirm from "../../components/global/Confirm";
+import { handleSelectionChange } from "../../handlers/selectionHandler";
 
 const Rfq = () => {
   const { showNotification } = useNotification();
@@ -31,10 +32,6 @@ const Rfq = () => {
     },
     selectedRows: [],
   });
-
-  const handleSelectionChange = selection => {
-    setPageState(oldState => ({ ...oldState, selectedRows: selection }));
-  };
 
   useEffect(() => {
     setLoadingFilterDependency(false);
@@ -103,7 +100,7 @@ const Rfq = () => {
       <ShowData
         pageState={pageState}
         setPageState={setPageState}
-        selection={handleSelectionChange}
+        selection={selection => handleSelectionChange(selection, setPageState)}
       />
       <Confirm
         open={openDeleteDialog}
