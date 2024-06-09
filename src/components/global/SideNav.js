@@ -6,11 +6,9 @@ import {
   PaymentsTwoTone,
 } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
-import { useAuthUser } from "react-auth-kit";
 
 const SideNav = () => {
   const theme = useTheme();
-  const auth = useAuthUser();
   const location = useLocation();
   return (
     <Sidebar

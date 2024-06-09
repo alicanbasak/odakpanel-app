@@ -1,10 +1,6 @@
 import React from "react";
 import DataTable from "../data/DataTable";
-// import { getRole } from "../../utils/getUserCredentials";
-
 const ShowData = ({ pageState, setPageState, selection }) => {
-  // const role = getRole();
-
   const columns = [
     {
       field: "Id",

@@ -15,6 +15,7 @@ import {
 import { Close as CloseIcon, Cancel as CancelIcon } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 import { useNotification } from "../../context/NotificationContext.js";
+import uploaderStyles from "../../styles/uploader.js";
 
 const UploaderDialog = ({ open, onClose, title }) => {
   const { showNotification } = useNotification();
@@ -53,7 +54,6 @@ const UploaderDialog = ({ open, onClose, title }) => {
 
   const handleSubmit = () => {
     console.log("Files submitted:", files);
-    // Gerekli işlemleri burada yapabilirsiniz.
   };
 
   const handleDelete = fileToDelete => {
@@ -65,13 +65,7 @@ const UploaderDialog = ({ open, onClose, title }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <Box sx={uploaderStyles.header}>
           {title}
           <IconButton onClick={onClose}>
             <CloseIcon />
@@ -80,18 +74,7 @@ const UploaderDialog = ({ open, onClose, title }) => {
       </DialogTitle>
       <Divider />
       <DialogContent>
-        <Box
-          {...getRootProps()}
-          sx={{
-            border: "2px dashed #ccc",
-            borderRadius: "8px",
-            padding: "66px",
-            textAlign: "center",
-            cursor: "pointer",
-            marginBottom: "16px",
-            position: "relative",
-          }}
-        >
+        <Box {...getRootProps()} sx={uploaderStyles.content}>
           <input {...getInputProps()} />
           {!uploading && (
             <Typography>
@@ -99,37 +82,24 @@ const UploaderDialog = ({ open, onClose, title }) => {
             </Typography>
           )}
           {uploading && (
-            <Box
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "rgba(255, 255, 255, 1)",
-                flexDirection: "column",
-              }}
-            >
+            <Box sx={uploaderStyles.uploading}>
               <LinearProgress
                 variant="buffer"
                 value={progress}
-                sx={{ width: "80%", height: "8px", marginTop: "0px" }}
+                sx={uploaderStyles.progressBar}
               />
             </Box>
           )}
         </Box>
         {files.length > 0 && uploaded && (
-          <Box sx={{ marginTop: "8px" }}>
+          <Box sx={uploaderStyles.fileBox}>
             {files.map(file => (
               <Chip
                 key={file.path}
                 label={file.path}
                 onDelete={() => handleDelete(file)}
                 deleteIcon={<CancelIcon />}
-                sx={{ marginBottom: "8px" }}
+                sx={uploaderStyles.chip}
               />
             ))}
           </Box>
@@ -141,9 +111,7 @@ const UploaderDialog = ({ open, onClose, title }) => {
           onClick={handleSubmit}
           variant="contained"
           color="primary"
-          sx={{
-            color: "white!important",
-          }}
+          sx={uploaderStyles.buttonTextColor}
           disabled={!uploaded}
         >
           Insert

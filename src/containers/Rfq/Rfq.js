@@ -11,6 +11,7 @@ import DeleteButton from "../../components/global/Button";
 import { useNotification } from "../../context/NotificationContext";
 import { deleteHandler } from "../../handlers/deleteHandler";
 import { setFilters } from "../../utils/setFilters";
+import buttonGroupStyles from "../../styles/buttonGroup";
 
 const Rfq = () => {
   const { showNotification } = useNotification();
@@ -72,15 +73,7 @@ const Rfq = () => {
 
   return (
     <Box sx={containerStyles.container}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-start",
-          gap: 2,
-          alignItems: "center",
-          marginBottom: 2,
-        }}
-      >
+      <Box sx={buttonGroupStyles.buttonGroup}>
         <InsertButton
           title="Insert RFQ"
           action={() => setOpenInsertDialog(true)}

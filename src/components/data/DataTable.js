@@ -6,10 +6,11 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
 } from "@mui/x-data-grid";
+import dataGridStyles from "../../styles/dataGrid";
 
 function CustomToolbar() {
   return (
-    <GridToolbarContainer sx={{ p: 2, borderBottom: "1px solid #ddd" }}>
+    <GridToolbarContainer sx={dataGridStyles.toolbar}>
       <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarExport />
@@ -27,11 +28,7 @@ const DataTable = ({
 }) => {
   return (
     <DataGrid
-      sx={{
-        backgroundColor: "white",
-        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
-        p: 1,
-      }}
+      sx={dataGridStyles.root}
       getRowId={row => row.Id}
       autoHeight
       rows={rows}
