@@ -137,7 +137,7 @@ const Filters = ({ filters, setFilters, filterOptions }) => {
           <Grid item xs={12} sm={12} md={4} key={index}>
             <Autocomplete
               size="small"
-              key={filterName}
+              key={index}
               sx={inputStyles.autoComplete}
               options={filterOptions[filterName]}
               getOptionLabel={option => option.label}

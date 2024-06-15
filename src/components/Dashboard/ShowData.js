@@ -7,6 +7,8 @@ import { Chip } from "@mui/material";
 const ShowData = ({ pageState, setPageState, factories, selection }) => {
   const role = getRole();
 
+  console.log("role", typeof role);
+
   const showBgColor = value => {
     if (value === 1) {
       return "#cfd8dc";
@@ -37,11 +39,6 @@ const ShowData = ({ pageState, setPageState, factories, selection }) => {
     } else {
       return "#607d8b";
     }
-  };
-
-  const getFactoryName = factoryId => {
-    const factory = factories.find(factory => factory.id.Id === factoryId);
-    return factory ? factory.id.Name : "";
   };
 
   const columns = [
@@ -335,7 +332,11 @@ const ShowData = ({ pageState, setPageState, factories, selection }) => {
       headerName: "Factory",
       sortable: true,
       // List factoryId instead of factoryName
-      valueGetter: params => getFactoryName(params.row.FactoryId),
+      valueGetter: params => {
+        return params.row.Factory["Name"]
+          ? params.row.Factory["Name"]
+          : params.row.FactoryId;
+      },
     },
     {
       field: "CreatedAt",

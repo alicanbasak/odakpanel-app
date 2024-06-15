@@ -50,28 +50,28 @@ const Dashboard = () => {
 
   const filterOptions = {
     status: statuses.map(status => ({
-      label: status,
-      value: status,
+      label: status.Status,
+      value: status.Status,
     })),
     customerId: customers.map(customer => ({
-      label: customer.id.Name,
-      value: customer.id.Id,
+      label: customer.Name,
+      value: customer.Id,
     })),
     factoryId: factories.map(factory => ({
-      label: factory.id.Name,
-      value: factory.id.Id,
+      label: factory.Name,
+      value: factory.Id,
     })),
     shipmentType: shipmentTypes.map(shipmentType => ({
-      label: shipmentType.id.ShipmentType,
-      value: shipmentType.id.ShipmentType.toString(),
+      label: shipmentType.ShipmentType,
+      value: shipmentType.ShipmentType,
     })),
     layers: layers.map(layer => ({
-      label: layer,
-      value: layer,
+      label: layer.Layers,
+      value: layer.Layers,
     })),
     ccl: ccls.map(ccl => ({
-      label: ccl,
-      value: ccl,
+      label: ccl.Ccl,
+      value: ccl.Ccl,
     })),
   };
 

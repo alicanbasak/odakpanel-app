@@ -8,6 +8,7 @@ export const calculateProfit = (
   let orderResultSumWithShipmentRate = orderResult + Number(shipmentRates);
   let result = orderResultSumWithShipmentRate / Number(salesPrice);
 
+  // shipment type yoksa hesabi yapma
   if (isNaN(result) || result === Infinity || result === -Infinity) {
     return 0;
   }
