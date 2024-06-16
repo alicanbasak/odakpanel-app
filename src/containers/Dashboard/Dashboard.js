@@ -79,14 +79,15 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const statuses = await getStatuses();
-        const factories = await getFactories();
-        const customers = await getCustomers();
+        //get factories dynamic page and pageSize
+        const factories = await getFactories({ page: 1, pageSize: 10 });
+        const customers = await getCustomers({ page: 1, pageSize: 10 });
         const shipmentTypes = await getShipmentTypes();
         const ccls = await getCcls();
         const layers = await getLayers();
         setStatuses(statuses);
-        setCustomers(customers);
-        setFactories(factories);
+        setCustomers(customers["items"]);
+        setFactories(factories["items"]);
         setShipmentTypes(shipmentTypes);
         setCcls(ccls);
         setLayers(layers);

@@ -1,5 +1,8 @@
 import { fetchData } from "../utils/fetchData";
 
-export const getCustomers = async () => {
-  return await fetchData(`/customers`);
+export const getCustomers = async ({ page, pageSize }) => {
+  return await fetchData(`/customers`, {
+    page,
+    pageSize,
+  });
 };

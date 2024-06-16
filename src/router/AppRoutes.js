@@ -4,9 +4,12 @@ import Dashboard from "../containers/Dashboard/Dashboard";
 import NotAuth from "../containers/Errors/NotAuth";
 import { SignIn } from "../containers/Auth";
 import Rfq from "../containers/Rfq/Rfq";
+import Invoices from "../containers/Invoices/Invoices";
+import Customers from "../containers/Customers/Customers";
+import Members from "../containers/Members/Members";
+import Factories from "../containers/Factories/Factories";
 
 function AppRoutes() {
-  //https://github.com/react-auth-kit/react-auth-kit/issues/1023
   const PrivateRoute = ({ Component }) => {
     const isAuthenticated = useIsAuthenticated();
     const auth = isAuthenticated();
@@ -17,7 +20,20 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<PrivateRoute Component={Dashboard} />}></Route>
       <Route path="/rfqs" element={<PrivateRoute Component={Rfq} />}></Route>
+      <Route
+        path="/invoices"
+        element={<PrivateRoute Component={Invoices} />}
+      ></Route>
       <Route path="/login" element={<SignIn />} />
+      <Route
+        path="/customers"
+        element={<PrivateRoute Component={Customers} />}
+      />
+      <Route path="/members" element={<PrivateRoute Component={Members} />} />
+      <Route
+        path="/factories"
+        element={<PrivateRoute Component={Factories} />}
+      />
       <Route path="/not-auth" element={<NotAuth />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
