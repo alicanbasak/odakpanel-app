@@ -602,7 +602,7 @@ export function setColumnsForPricing(role) {
   ].filter(Boolean);
 }
 
-export function setColumnsForDelay(role) {
+export function setColumnsForDelay() {
   return [
     {
       field: "Id",
@@ -722,7 +722,7 @@ export function setColumnsForDelay(role) {
   ].filter(Boolean);
 }
 
-export function setColumnsForKubra(role) {
+export function setColumnsForKubra() {
   return [
     {
       field: "OdakOrderNumber",

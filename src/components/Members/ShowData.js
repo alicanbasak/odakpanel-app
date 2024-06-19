@@ -1,33 +1,8 @@
 import React from "react";
 import DataTable from "../data/DataTable";
+import { columns } from "./columns";
 
 const ShowData = ({ pageState, setPageState, selection }) => {
-  const columns = [
-    {
-      field: "Id",
-      headerName: "Id",
-      valueGetter: params => params.row.Id,
-      sortable: true,
-    },
-    {
-      field: "Email",
-      headerName: "Email",
-      sortable: true,
-      flex: 1,
-    },
-    {
-      field: "Name",
-      headerName: "Name",
-      sortable: true,
-      flex: 1,
-    },
-    {
-      field: "Surname",
-      headerName: "Surname",
-      sortable: true,
-      flex: 1,
-    },
-  ].filter(Boolean);
   return (
     <DataTable
       getRowId={row => row.Id}
