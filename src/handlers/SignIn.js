@@ -2,9 +2,11 @@
 
 import { useSignIn } from "react-auth-kit";
 import { loginUser } from "../Api/SignIn";
+import { useNotification } from "../context/NotificationContext";
 
 export const useHandleSubmit = () => {
   const signIn = useSignIn();
+  const { showNotification } = useNotification();
 
   return async (values, navigate) => {
     try {
@@ -25,10 +27,11 @@ export const useHandleSubmit = () => {
           },
         })
       ) {
+        showNotification("Login successful", "success");
         navigate("/");
       }
     } catch (err) {
-      console.error(err);
+      showNotification("Login failed", "error");
     }
   };
 };
