@@ -1,6 +1,6 @@
 import React from "react";
 import DataTable from "../data/DataTable";
-import { columns } from "./columns";
+import { baseColumns } from "./columns";
 
 const ShowData = ({ pageState, setPageState, selection }) => {
   return (
@@ -8,7 +8,7 @@ const ShowData = ({ pageState, setPageState, selection }) => {
       getRowId={row => row.Id}
       className="table-list"
       rows={pageState.data}
-      columns={columns}
+      columns={baseColumns}
       role={1}
       pageState={pageState}
       setPageState={setPageState}

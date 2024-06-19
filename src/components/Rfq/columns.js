@@ -1,47 +1,10 @@
-import { setDateFromLocally } from "../../utils/setDateFromLocally";
-import { setStandartColumn } from "../../utils/setStandartColumn";
+import { createColumnConfig } from "../../utils/columnCreator";
 
-const fields = [
-  {
-    field: "Id",
-    headerName: "Id",
-    valueGetter: params => params.row.Id,
-    sortable: true,
-  },
-  {
-    field: "OdakCode",
-    headerName: "PCB Code",
-    valueGetter: params => params.row.OdakCode,
-    sortable: true,
-    flex: 2,
-  },
-  {
-    field: "CustomerName",
-    headerName: "Customer",
-    valueGetter: params => params.row.CustomerName,
-    sortable: true,
-    flex: 2,
-  },
-  {
-    field: "CustomerCode",
-    headerName: "Customer Code",
-    valueGetter: params => params.row.CustomerCode,
-    sortable: true,
-    flex: 2,
-  },
-  {
-    field: "SatisElemani",
-    headerName: "Customer Representative",
-    valueGetter: params => params.row.SatisElemani,
-    sortable: true,
-    flex: 2,
-  },
-  {
-    field: "CreatedAt",
-    headerName: "Rfq Date",
-    valueGetter: params => setDateFromLocally(params.row.CreatedAt),
-    flex: 2,
-  },
+export const baseColumns = [
+  createColumnConfig("Id", "Id"),
+  createColumnConfig("OdakCode", "PCB Code"),
+  createColumnConfig("CustomerName", "Customer"),
+  createColumnConfig("CustomerCode", "Customer Code"),
+  createColumnConfig("SatisElemani", "Customer Representative"),
+  createColumnConfig("CreatedAt", "Rfq Date"),
 ];
-
-export const columns = setStandartColumn(fields);

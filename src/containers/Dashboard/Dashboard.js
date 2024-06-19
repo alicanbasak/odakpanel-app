@@ -21,7 +21,6 @@ import Selecting from "../../components/global/Selecting";
 const Dashboard = () => {
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
   const [error, setError] = useState(null);
-  const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
   const [factories, setFactories] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [shipmentTypes, setShipmentTypes] = useState([]);
@@ -77,32 +76,32 @@ const Dashboard = () => {
     })),
   };
 
+  const fetchFilterDependency = async () => {
+    try {
+      const statuses = await getStatuses();
+      const factories = await getFactories({ page: 1, pageSize: 10 });
+      const customers = await getCustomers({ page: 1, pageSize: 10 });
+      const shipmentTypes = await getShipmentTypes();
+      const ccls = await getCcls();
+      const layers = await getLayers();
+      setStatuses(statuses);
+      setCustomers(customers["items"]);
+      setFactories(factories["items"]);
+      setShipmentTypes(shipmentTypes);
+      setCcls(ccls);
+      setLayers(layers);
+    } catch (error) {
+      setError(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const statuses = await getStatuses();
-        //get factories dynamic page and pageSize
-        const factories = await getFactories({ page: 1, pageSize: 10 });
-        const customers = await getCustomers({ page: 1, pageSize: 10 });
-        const shipmentTypes = await getShipmentTypes();
-        const ccls = await getCcls();
-        const layers = await getLayers();
-        setStatuses(statuses);
-        setCustomers(customers["items"]);
-        setFactories(factories["items"]);
-        setShipmentTypes(shipmentTypes);
-        setCcls(ccls);
-        setLayers(layers);
-        setLoadingFilterDependency(false);
-      } catch (error) {
-        setError(error);
-      }
-    };
-    fetchData();
-  }, [loadingFilterDependency]);
+    fetchFilterDependency();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("Fetcing - Order List");
       setPageState(oldState => ({ ...oldState, isLoading: true }));
       try {
         const { items, totalCount } = await getOrderList({
@@ -122,12 +121,7 @@ const Dashboard = () => {
       }
     };
     fetchData();
-  }, [
-    pageState.page,
-    pageState.pageSize,
-    pageState.filters,
-    loadingFilterDependency,
-  ]);
+  }, [pageState.page, pageState.pageSize, pageState.filters]);
 
   if (error) {
     return <ShowError error={error} />;

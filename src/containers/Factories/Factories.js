@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import ShowData from "../../components/Customers/ShowData";
 import ShowError from "../../components/global/ShowError";
 import { handleSelectionChange } from "../../handlers/selectionHandler";
 import { getFactories } from "../../Api/Factories";
+import ShowData from "../../components/Factories/ShowData";
 
 const Factories = () => {
   const [error, setError] = useState(null);
@@ -37,9 +37,8 @@ const Factories = () => {
         setError(error);
       }
     };
-
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.filters]);
+  }, [pageState.page, pageState.pageSize]);
 
   if (error) {
     return <ShowError error={error} />;
