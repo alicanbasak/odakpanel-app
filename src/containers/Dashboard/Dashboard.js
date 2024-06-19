@@ -16,6 +16,7 @@ import ShowError from "../../components/global/ShowError";
 import InsertButton from "../../components/global/Button";
 import { setFilters } from "../../utils/setFilters";
 import { handleSelectionChange } from "../../handlers/selectionHandler";
+import Selecting from "../../components/global/Selecting";
 
 const Dashboard = () => {
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
@@ -27,6 +28,7 @@ const Dashboard = () => {
   const [ccls, setCcls] = useState([]);
   const [layers, setLayers] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [tableLayout, setTableLayout] = useState(4);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -131,12 +133,29 @@ const Dashboard = () => {
     return <ShowError error={error} />;
   }
 
+  const handleSelectionTableLayout = selection => {
+    setTableLayout(selection);
+    console.log("tableLayout", tableLayout);
+  };
+
   return (
     <Box sx={containerStyles.container}>
-      <InsertButton
-        title="Insert Order"
-        action={() => setOpenInsertDialog(true)}
-      />
+      <Box sx={containerStyles.containerHeader}>
+        <InsertButton
+          title="Insert Order"
+          action={() => setOpenInsertDialog(true)}
+        />
+        <Selecting
+          values={[
+            { label: "Standart", value: 4 },
+            { label: "Pricing", value: 1 },
+            { label: "Delay", value: 2 },
+            { label: "Kubra", value: 3 },
+          ]}
+          activeLayout={tableLayout}
+          changeTable={value => handleSelectionTableLayout(value)}
+        />
+      </Box>
       <NotificationProvider>
         <Uploader
           open={openInsertDialog}
@@ -151,6 +170,7 @@ const Dashboard = () => {
         filterOptions={filterOptions}
       />
       <ShowData
+        layout={tableLayout}
         factories={factories}
         pageState={pageState}
         setPageState={setPageState}

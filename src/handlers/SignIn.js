@@ -12,12 +12,12 @@ export const useHandleSubmit = () => {
       console.log(response);
       if (
         signIn({
-          token: response.token,
-          expiresIn: 3600,
           tokenType: "Bearer",
+          expiresIn: 3600,
+          token: response.token,
           authState: {
             id: response.user.Id,
-            username: values.Username,
+            username: response.user.Username,
             role: response.user.RoleId,
             email: response.user.Email,
             salesPersonCode: response.user.SatisElemaniKodu,

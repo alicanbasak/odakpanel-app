@@ -13,6 +13,10 @@ const inputStyles = {
   textField: {
     width: "100%",
   },
+  select: {
+    minWidth: "200px",
+    width: "100%",
+  },
 };
 
 export default inputStyles;

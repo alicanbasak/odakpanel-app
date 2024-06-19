@@ -9,7 +9,6 @@ export const getUserCredentials = () => {
 
 //  get user role
 export const getRole = () => {
-  const authUser = useAuthUser();
-  const role = authUser().role;
-  return role;
+  const authUser = getUserCredentials();
+  return authUser.role;
 };

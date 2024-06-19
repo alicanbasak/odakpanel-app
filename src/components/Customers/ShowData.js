@@ -16,6 +16,7 @@ const ShowData = ({ pageState, setPageState, selection }) => {
       flex: 1,
     },
   ].filter(Boolean);
+
   return (
     <DataTable
       getRowId={row => row.Id}
