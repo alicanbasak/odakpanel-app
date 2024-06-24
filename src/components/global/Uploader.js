@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  LinearProgress,
+  CircularProgress,
   Divider,
   Chip,
 } from "@mui/material";
@@ -17,49 +17,51 @@ import { useDropzone } from "react-dropzone";
 import { useNotification } from "../../context/NotificationContext.js";
 import uploaderStyles from "../../styles/uploader.js";
 
-const UploaderDialog = ({ open, onClose, title }) => {
+const UploaderDialog = ({ open, onClose, title, renderTable, uploads }) => {
   const { showNotification } = useNotification();
-  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [uploaded, setUploaded] = useState(false);
 
   const onDrop = acceptedFiles => {
-    setFiles(acceptedFiles);
-    handleUpload(acceptedFiles);
+    setFile(acceptedFiles[0]);
   };
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  const handleUpload = files => {
+  const formData = new FormData();
+
+  const handleUpload = async () => {
     setUploading(true);
-    setProgress(0);
-    setUploaded(false);
-    let totalSize = files.reduce((acc, file) => acc + file.size, 0);
-    let loaded = 0;
 
-    const interval = setInterval(() => {
-      loaded += totalSize * 0.1;
-      let fakeProgress = Math.min((loaded / totalSize) * 100, 100);
-      setProgress(fakeProgress);
+    if (file) {
+      formData.append("file", file);
+    }
 
-      if (fakeProgress >= 100) {
-        clearInterval(interval);
-        setUploading(false);
-        setUploaded(true);
-        showNotification("Upload completed successfully", "success");
-      }
-    }, 500);
+    try {
+      const response = await uploads(formData);
+      showNotification("File uploaded successfully", "success");
+
+      await renderTable();
+      return response;
+    } catch (error) {
+      showNotification("An error occurred while uploading the file", "error");
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const handleSubmit = () => {
-    console.log("Files submitted:", files);
+  const handleSubmit = async () => {
+    if (file) {
+      await handleUpload();
+      setFile(null);
+      onClose();
+    } else {
+      showNotification("Please select a file first", "warning");
+    }
   };
 
-  const handleDelete = fileToDelete => {
-    setFiles(files.filter(file => file !== fileToDelete));
-    setUploaded(false);
-    setProgress(0);
+  const handleDelete = () => {
+    setFile(null);
   };
 
   return (
@@ -78,30 +80,25 @@ const UploaderDialog = ({ open, onClose, title }) => {
           <input {...getInputProps()} />
           {!uploading && (
             <Typography>
-              Drag and drop files here, or click to select files
+              Drag and drop a file here, or click to select a file
             </Typography>
           )}
           {uploading && (
             <Box sx={uploaderStyles.uploading}>
-              <LinearProgress
-                variant="buffer"
-                value={progress}
-                sx={uploaderStyles.progressBar}
-              />
+              {<CircularProgress disableShrink />}
             </Box>
           )}
         </Box>
-        {files.length > 0 && uploaded && (
+        {file && (
           <Box sx={uploaderStyles.fileBox}>
-            {files.map(file => (
-              <Chip
-                key={file.path}
-                label={file.path}
-                onDelete={() => handleDelete(file)}
-                deleteIcon={<CancelIcon />}
-                sx={uploaderStyles.chip}
-              />
-            ))}
+            <Chip
+              key={file.name}
+              kullanılabilir
+              label={file.name}
+              onDelete={handleDelete}
+              deleteIcon={<CancelIcon />}
+              sx={uploaderStyles.chip}
+            />
           </Box>
         )}
       </DialogContent>
@@ -112,7 +109,7 @@ const UploaderDialog = ({ open, onClose, title }) => {
           variant="contained"
           color="primary"
           sx={uploaderStyles.buttonTextColor}
-          disabled={!uploaded}
+          disabled={!file || uploading}
         >
           Insert
         </Button>
