@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getOrderList } from "../../Api/Dashboard";
+import { getOrderList, uploadOrders } from "../../Api/Dashboard";
 import Filters from "./Filters/Filters";
 import { getFactories } from "../../Api/Factories";
 import { getCustomers } from "../../Api/Customers";
@@ -11,7 +11,6 @@ import { Box } from "@mui/material";
 import ShowData from "../../components/Dashboard/ShowData";
 import containerStyles from "../../styles/container";
 import Uploader from "../../components/global/Uploader";
-import { NotificationProvider } from "../../context/NotificationContext";
 import ShowError from "../../components/global/ShowError";
 import InsertButton from "../../components/global/Button";
 import { setFilters } from "../../utils/setFilters";
@@ -27,6 +26,7 @@ const Dashboard = () => {
   const [ccls, setCcls] = useState([]);
   const [layers, setLayers] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [renderTable, setRenderTable] = useState(false);
   const [tableLayout, setTableLayout] = useState(4);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -121,7 +121,7 @@ const Dashboard = () => {
       }
     };
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.filters]);
+  }, [pageState.page, pageState.pageSize, pageState.filters, renderTable]);
 
   if (error) {
     return <ShowError error={error} />;
@@ -129,7 +129,10 @@ const Dashboard = () => {
 
   const handleSelectionTableLayout = selection => {
     setTableLayout(selection);
-    console.log("tableLayout", tableLayout);
+  };
+
+  const handleRenderTable = () => {
+    setRenderTable(!renderTable);
   };
 
   return (
@@ -150,13 +153,14 @@ const Dashboard = () => {
           changeTable={value => handleSelectionTableLayout(value)}
         />
       </Box>
-      <NotificationProvider>
-        <Uploader
-          open={openInsertDialog}
-          onClose={() => setOpenInsertDialog(false)}
-          title="Insert Order"
-        />
-      </NotificationProvider>
+
+      <Uploader
+        open={openInsertDialog}
+        onClose={() => setOpenInsertDialog(false)}
+        title="Insert Order"
+        uploads={data => uploadOrders(data)}
+        renderTable={() => handleRenderTable()}
+      />
 
       <Filters
         filters={pageState.filters}
