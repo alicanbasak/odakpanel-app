@@ -13,12 +13,19 @@ import containerStyles from "../../styles/container";
 import Uploader from "../../components/global/Uploader";
 import ShowError from "../../components/global/ShowError";
 import InsertButton from "../../components/global/Button";
+import DeleteButton from "../../components/global/Button";
 import { setFilters } from "../../utils/setFilters";
 import { handleSelectionChange } from "../../handlers/selectionHandler";
 import Selecting from "../../components/global/Selecting";
+import Confirm from "../../components/global/Confirm";
+import { deleteHandler } from "../../handlers/deleteHandler";
+import { useNotification } from "../../context/NotificationContext";
+import buttonGroupStyles from "../../styles/buttonGroup";
 
 const Dashboard = () => {
+  const { showNotification } = useNotification();
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [error, setError] = useState(null);
   const [factories, setFactories] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -28,6 +35,7 @@ const Dashboard = () => {
   const [statuses, setStatuses] = useState([]);
   const [renderTable, setRenderTable] = useState(false);
   const [tableLayout, setTableLayout] = useState(4);
+  const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -95,13 +103,21 @@ const Dashboard = () => {
     }
   };
 
+  const handleSelectionTableLayout = selection => {
+    setTableLayout(selection);
+  };
+
+  const handleRenderTable = () => {
+    setRenderTable(!renderTable);
+  };
+
   useEffect(() => {
     fetchFilterDependency();
-  }, []);
+    setLoadingFilterDependency(false);
+  }, [loadingFilterDependency]);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("Fetcing - Order List");
       setPageState(oldState => ({ ...oldState, isLoading: true }));
       try {
         const { items, totalCount } = await getOrderList({
@@ -121,27 +137,38 @@ const Dashboard = () => {
       }
     };
     fetchData();
-  }, [pageState.page, pageState.pageSize, pageState.filters, renderTable]);
+  }, [
+    pageState.page,
+    pageState.pageSize,
+    pageState.filters,
+    renderTable,
+    loadingFilterDependency,
+  ]);
 
   if (error) {
     return <ShowError error={error} />;
   }
 
-  const handleSelectionTableLayout = selection => {
-    setTableLayout(selection);
-  };
-
-  const handleRenderTable = () => {
-    setRenderTable(!renderTable);
-  };
-
   return (
     <Box sx={containerStyles.container}>
       <Box sx={containerStyles.containerHeader}>
-        <InsertButton
-          title="Insert Order"
-          action={() => setOpenInsertDialog(true)}
-        />
+        <Box sx={buttonGroupStyles.buttonGroup}>
+          <InsertButton
+            title="Insert Order"
+            action={() => setOpenInsertDialog(true)}
+          />
+
+          {pageState.selectedRows.length > 0 && (
+            <DeleteButton
+              title="Delete RFQ"
+              action={
+                pageState.selectedRows.length > 0
+                  ? () => setOpenDeleteDialog(true)
+                  : null
+              }
+            />
+          )}
+        </Box>
         <Selecting
           values={[
             { label: "Standart", value: 4 },
@@ -173,6 +200,23 @@ const Dashboard = () => {
         pageState={pageState}
         setPageState={setPageState}
         selection={selection => handleSelectionChange(selection, setPageState)}
+      />
+      <Confirm
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        title="Delete Order"
+        content={"Are you sure you want to delete the selected orders?"}
+        buttonText="Delete"
+        action={() =>
+          deleteHandler(
+            "/orderList/delete",
+            pageState.selectedRows,
+            showNotification,
+            setError,
+            setPageState,
+            setLoadingFilterDependency
+          ).then(() => setOpenDeleteDialog(false))
+        }
       />
     </Box>
   );

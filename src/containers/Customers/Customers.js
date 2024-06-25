@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 import ShowData from "../../components/Customers/ShowData";
 import ShowError from "../../components/global/ShowError";
 import { handleSelectionChange } from "../../handlers/selectionHandler";
 import { getCustomers } from "../../Api/Customers";
+import containerStyles from "../../styles/container";
+import { setFilters } from "../../utils/setFilters";
+import Filters from "./Filters/Filters";
 
 const Customers = () => {
   const [error, setError] = useState(null);
@@ -25,6 +29,7 @@ const Customers = () => {
         const { items, totalCount } = await getCustomers({
           page: pageState.page + 1,
           pageSize: pageState.pageSize,
+          filters: pageState.filters,
         });
         setPageState(oldState => ({
           ...oldState,
@@ -45,11 +50,17 @@ const Customers = () => {
     return <ShowError error={error} />;
   }
   return (
-    <ShowData
-      pageState={pageState}
-      setPageState={setPageState}
-      selection={selection => handleSelectionChange(selection, setPageState)}
-    />
+    <Box sx={containerStyles.container}>
+      <Filters
+        filters={pageState.filters}
+        setFilters={filters => setFilters(filters, setPageState)}
+      />
+      <ShowData
+        pageState={pageState}
+        setPageState={setPageState}
+        selection={selection => handleSelectionChange(selection, setPageState)}
+      />
+    </Box>
   );
 };
 

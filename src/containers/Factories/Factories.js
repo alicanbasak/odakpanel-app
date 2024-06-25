@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 import ShowError from "../../components/global/ShowError";
 import { handleSelectionChange } from "../../handlers/selectionHandler";
 import { getFactories } from "../../Api/Factories";
 import ShowData from "../../components/Factories/ShowData";
+import containerStyles from "../../styles/container";
+import { setFilters } from "../../utils/setFilters";
+import Filters from "./Filters/Filters";
 
 const Factories = () => {
   const [error, setError] = useState(null);
@@ -25,6 +29,7 @@ const Factories = () => {
         const { items, totalCount } = await getFactories({
           page: pageState.page + 1,
           pageSize: pageState.pageSize,
+          filters: pageState.filters,
         });
         setPageState(oldState => ({
           ...oldState,
@@ -38,17 +43,23 @@ const Factories = () => {
       }
     };
     fetchData();
-  }, [pageState.page, pageState.pageSize]);
+  }, [pageState.page, pageState.pageSize, pageState.filters]);
 
   if (error) {
     return <ShowError error={error} />;
   }
   return (
-    <ShowData
-      pageState={pageState}
-      setPageState={setPageState}
-      selection={selection => handleSelectionChange(selection, setPageState)}
-    />
+    <Box sx={containerStyles.container}>
+      <Filters
+        filters={pageState.filters}
+        setFilters={filters => setFilters(filters, setPageState)}
+      />
+      <ShowData
+        pageState={pageState}
+        setPageState={setPageState}
+        selection={selection => handleSelectionChange(selection, setPageState)}
+      />
+    </Box>
   );
 };
 
