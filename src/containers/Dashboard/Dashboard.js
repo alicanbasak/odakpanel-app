@@ -160,7 +160,7 @@ const Dashboard = () => {
 
           {pageState.selectedRows.length > 0 && (
             <DeleteButton
-              title="Delete RFQ"
+              title="Delete Order"
               action={
                 pageState.selectedRows.length > 0
                   ? () => setOpenDeleteDialog(true)
@@ -199,6 +199,7 @@ const Dashboard = () => {
         factories={factories}
         pageState={pageState}
         setPageState={setPageState}
+        renderTable={handleRenderTable}
         selection={selection => handleSelectionChange(selection, setPageState)}
       />
       <Confirm

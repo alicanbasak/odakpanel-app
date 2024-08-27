@@ -11,7 +11,7 @@ export const useHandleSubmit = () => {
   return async (values, navigate) => {
     try {
       const response = await loginUser(values);
-      console.log(response);
+
       if (
         signIn({
           tokenType: "Bearer",
