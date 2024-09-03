@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getOrderList, uploadOrders } from "../../Api/Dashboard";
+import {
+  getLastOrderNumber,
+  getOrderList,
+  uploadOrders,
+} from "../../Api/Dashboard";
 import Filters from "./Filters/Filters";
 import { getFactories } from "../../Api/Factories";
 import { getCustomers } from "../../Api/Customers";
@@ -14,6 +18,7 @@ import Uploader from "../../components/global/Uploader";
 import ShowError from "../../components/global/ShowError";
 import InsertButton from "../../components/global/Button";
 import DeleteButton from "../../components/global/Button";
+import UpdateButton from "../../components/global/Button";
 import { setFilters } from "../../utils/setFilters";
 import { handleSelectionChange } from "../../handlers/selectionHandler";
 import Selecting from "../../components/global/Selecting";
@@ -21,11 +26,13 @@ import Confirm from "../../components/global/Confirm";
 import { deleteHandler } from "../../handlers/deleteHandler";
 import { useNotification } from "../../context/NotificationContext";
 import buttonGroupStyles from "../../styles/buttonGroup";
+import UpdateOrders from "./Update/UpdateOrders";
 
 const Dashboard = () => {
   const { showNotification } = useNotification();
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [error, setError] = useState(null);
   const [factories, setFactories] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -35,6 +42,7 @@ const Dashboard = () => {
   const [statuses, setStatuses] = useState([]);
   const [renderTable, setRenderTable] = useState(false);
   const [tableLayout, setTableLayout] = useState(4);
+  const [lastOrderNumber, setLastOrderNumber] = useState(0);
   const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -87,8 +95,8 @@ const Dashboard = () => {
   const fetchFilterDependency = async () => {
     try {
       const statuses = await getStatuses();
-      const factories = await getFactories({ page: 1, pageSize: 10 });
-      const customers = await getCustomers({ page: 1, pageSize: 10 });
+      const factories = await getFactories({ page: 1, pageSize: 1000 });
+      const customers = await getCustomers({ page: 1, pageSize: 1000 });
       const shipmentTypes = await getShipmentTypes();
       const ccls = await getCcls();
       const layers = await getLayers();
@@ -125,12 +133,15 @@ const Dashboard = () => {
           pageSize: pageState.pageSize,
           filters: pageState.filters,
         });
+        const lastOrderNumber = await getLastOrderNumber();
         setPageState(oldState => ({
           ...oldState,
           isLoading: false,
           data: items,
           total: totalCount,
         }));
+        setLastOrderNumber(lastOrderNumber);
+        console.log("lastOrderNumber", lastOrderNumber);
       } catch (error) {
         setPageState(oldState => ({ ...oldState, isLoading: false }));
         setError(error);
@@ -166,6 +177,12 @@ const Dashboard = () => {
                   ? () => setOpenDeleteDialog(true)
                   : null
               }
+            />
+          )}
+          {pageState.selectedRows.length === 1 && (
+            <UpdateButton
+              title="Update Order"
+              action={() => setOpenUpdateDialog(true)}
             />
           )}
         </Box>
@@ -219,6 +236,22 @@ const Dashboard = () => {
           ).then(() => setOpenDeleteDialog(false))
         }
       />
+      {openUpdateDialog && (
+        <UpdateOrders
+          lastOrderNumber={lastOrderNumber}
+          shipmentTypes={shipmentTypes}
+          customers={customers}
+          factories={factories}
+          ccls={ccls}
+          layers={layers}
+          statuses={statuses}
+          open={openUpdateDialog}
+          id={pageState.selectedRows[0]}
+          onClose={() => setOpenUpdateDialog(false)}
+          title="Update Order"
+          buttonText="Update"
+        />
+      )}
     </Box>
   );
 };

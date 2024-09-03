@@ -11,8 +11,10 @@ import {
 } from "./columns";
 
 import HandleChipClick from "./HandleChipClick";
+
 import { showBgColor, showTextColor } from "../../styles/tableRowColors";
 import { Tooltip } from "@mui/material";
+import HandleOrderNumberClick from "./HandleOrderNumberClick";
 
 const ShowData = ({
   pageState,
@@ -25,13 +27,19 @@ const ShowData = ({
 }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
+  const [orderNumberDrawerOpen, setOrderNumberDrawerOpen] = useState(false);
+  const [selectedOrderNumber, setSelectedOrderNumber] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [selectedGerber, setSelectedGerber] = useState(null);
 
   const handleChipClick = data => {
     setSelectedData(data.RelatedOrders);
     setSelectedId(data.Id); // ID'yi ayarla
     setDrawerOpen(true);
+  };
+
+  const handleOrderNumberClick = data => {
+    setSelectedOrderNumber(data.OrderNumber);
+    setOrderNumberDrawerOpen(true);
   };
 
   const closeAndRefresh = () => {
@@ -90,6 +98,22 @@ const ShowData = ({
             ) : (
               params.value
             ),
+          valueGetter: params =>
+            col.field === "OrderNumber" ? (
+              <Chip
+                label={params.row.OrderNumber ? params.row.OrderNumber : "N/A"}
+                sx={{
+                  color: "#ef7757",
+                  fontWeight: "500",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  // backgroundColor: "#f7f7f7",
+                }}
+                onClick={() => handleOrderNumberClick(params.row)}
+              />
+            ) : (
+              params.value
+            ),
         }))}
         role={role}
         pageState={pageState}
@@ -104,6 +128,13 @@ const ShowData = ({
           parentId={selectedId}
           factories={factories}
           renderTable={renderTable}
+        />
+      )}
+      {selectedOrderNumber && (
+        <HandleOrderNumberClick
+          open={orderNumberDrawerOpen}
+          onClose={() => setOrderNumberDrawerOpen(false)}
+          orderNumber={selectedOrderNumber}
         />
       )}
     </>

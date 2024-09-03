@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getRfqList } from "../../Api/Rfq";
+import { getRfqList, uploadRfqs } from "../../Api/Rfq";
 import ShowData from "../../components/Rfq/ShowData";
 import Filters from "./Filters/Filters";
 import containerStyles from "../../styles/container";
@@ -19,6 +19,7 @@ const Rfq = () => {
   const { showNotification } = useNotification();
   const [openInsertDialog, setOpenInsertDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [renderTable, setRenderTable] = useState(false);
   const [error, setError] = useState(null);
   const [loadingFilterDependency, setLoadingFilterDependency] = useState(true);
   const [pageState, setPageState] = useState({
@@ -32,6 +33,10 @@ const Rfq = () => {
     },
     selectedRows: [],
   });
+
+  const handleRenderTable = () => {
+    setRenderTable(!renderTable);
+  };
 
   useEffect(() => {
     setLoadingFilterDependency(false);
@@ -63,6 +68,7 @@ const Rfq = () => {
     pageState.page,
     pageState.pageSize,
     pageState.filters,
+    renderTable,
     loadingFilterDependency,
   ]);
 
@@ -92,6 +98,8 @@ const Rfq = () => {
         open={openInsertDialog}
         onClose={() => setOpenInsertDialog(false)}
         title="Insert RFQ"
+        uploads={data => uploadRfqs(data)}
+        renderTable={() => handleRenderTable()}
       />
       <Filters
         filters={pageState.filters}
@@ -100,6 +108,7 @@ const Rfq = () => {
       <ShowData
         pageState={pageState}
         setPageState={setPageState}
+        renderTable={handleRenderTable}
         selection={selection => handleSelectionChange(selection, setPageState)}
       />
       <Confirm

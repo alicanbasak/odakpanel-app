@@ -8,6 +8,7 @@ import Invoices from "../containers/Invoices/Invoices";
 import Customers from "../containers/Customers/Customers";
 import Members from "../containers/Members/Members";
 import Factories from "../containers/Factories/Factories";
+import RfqDetail from "../containers/Rfq/RfqDetail";
 
 function AppRoutes() {
   const PrivateRoute = ({ Component }) => {
@@ -20,6 +21,10 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<PrivateRoute Component={Dashboard} />}></Route>
       <Route path="/rfqs" element={<PrivateRoute Component={Rfq} />}></Route>
+      <Route
+        path="/rfqs/:id"
+        element={<PrivateRoute Component={RfqDetail} />}
+      ></Route>
       <Route
         path="/invoices"
         element={<PrivateRoute Component={Invoices} />}

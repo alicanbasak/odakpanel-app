@@ -7,3 +7,7 @@ export const getCustomers = async ({ page, pageSize, filters }) => {
     ...filters,
   });
 };
+
+export const getCustomerNameById = async id => {
+  return await fetchData(`/customers/get-customer-name/${id}`);
+};

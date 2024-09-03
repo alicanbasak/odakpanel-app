@@ -1,10 +1,22 @@
 import { createColumnConfig } from "../../utils/columnCreator";
 
 export const baseColumns = [
-  createColumnConfig("Id", "Id"),
-  createColumnConfig("OdakCode", "PCB Code"),
-  createColumnConfig("CustomerName", "Customer"),
-  createColumnConfig("CustomerCode", "Customer Code"),
-  createColumnConfig("SatisElemani", "Customer Representative"),
-  createColumnConfig("CreatedAt", "Rfq Date"),
+  createColumnConfig("Id", "Id", {
+    flex: 1,
+  }),
+  createColumnConfig("OdakCode", "PCB Code", {
+    flex: 1,
+  }),
+  createColumnConfig("CustomerName", "Customer", {
+    flex: 1,
+  }),
+  createColumnConfig("CustomerCode", "Customer Code", {
+    flex: 1,
+  }),
+  createColumnConfig("SatisElemani", "Customer Representative", {
+    flex: 1,
+  }),
+  createColumnConfig("CreatedAt", "Rfq Date", {
+    flex: 1,
+  }),
 ];

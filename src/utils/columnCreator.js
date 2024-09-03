@@ -5,39 +5,37 @@ import Tooltip from "@mui/material/Tooltip";
 import { calculateProfit } from "./calculateProfit";
 import { showBgColor, showTextColor } from "../styles/tableRowColors";
 import HandleChipClick from "../components/Dashboard/HandleChipClick";
-
-export const createColumnConfig = (field, headerName, options = {}) => {
+import HandleOrderNumberClick from "../components/Dashboard/HandleOrderNumberClick";
+export const createColumnConfig = (
+  field,
+  headerName,
+  options,
+  isFlex,
+  width
+) => {
   const baseConfig = {
     field,
     headerName,
+    flex: isFlex ? 1 : 0,
+    width: width ? width : 150,
     sortable: true,
     ...options,
   };
 
-  if (field === "Gerber") {
+  if (field === "OdakCode") {
     baseConfig.renderCell = params => (
-      <Tooltip title={params.row.RepeatOfGerber}>
-        <Chip
-          label={params.row.Gerber}
-          sx={{
-            color: showTextColor(params.row.DataStatus),
-            fontWeight: "500",
-            borderRadius: "5px",
-            backgroundColor: showBgColor(params.row.DataStatus),
-            width: "100%",
-            cursor: "pointer",
-          }}
-          onClick={() => HandleChipClick(params.row)}
-        />
-      </Tooltip>
+      <a
+        style={{
+          color: "#ef7757",
+          fontWeight: "500",
+          cursor: "pointer",
+          textDecoration: "none",
+        }}
+        href={`/rfqs/${params.row.Id}`}
+      >
+        {params.row.OdakCode}
+      </a>
     );
-  }
-
-  if (field === "FactoryId") {
-    baseConfig.valueGetter = params =>
-      params.row.Factory && params.row.Factory.Name
-        ? params.row.Factory.Name
-        : params.row.FactoryId;
   }
 
   if (field === "Profit") {
@@ -49,6 +47,40 @@ export const createColumnConfig = (field, headerName, options = {}) => {
         params.row.Fiyat
       );
     };
+  }
+  if (field === "CreatedAt") {
+    baseConfig.valueGetter = params => {
+      return new Date(params.row.CreatedAt).toLocaleDateString("tr-TR");
+    };
+  }
+
+  if (field === "CustomerName") {
+    baseConfig.valueGetter = params =>
+      params.row.Customer && params.row.Customer.Name
+        ? params.row.Customer.Name
+        : params.row.CustomerId;
+  }
+
+  if (field === "OrderNumber") {
+    baseConfig.renderCell = params => (
+      <Chip
+        label={params.row.OrderNumber}
+        sx={{
+          color: "#ef7757",
+          fontWeight: "500",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+        onClick={() => HandleOrderNumberClick(params.row)}
+      />
+    );
+  }
+
+  if (field === "FactoryId") {
+    baseConfig.valueGetter = params =>
+      params.row.Factory && params.row.Factory.Name
+        ? params.row.Factory.Name
+        : params.row.FactoryId;
   }
 
   return baseConfig;
